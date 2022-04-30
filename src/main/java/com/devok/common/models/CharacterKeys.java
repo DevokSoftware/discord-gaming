@@ -1,4 +1,4 @@
-package com.devok.models;
+package com.devok.common.models;
 
 
 import javax.persistence.Column;
@@ -9,12 +9,16 @@ import java.io.Serializable;
 public class CharacterKeys implements Serializable {
     @Column(name = "USER_ID")
     private String userId;
-    @Column(name = "CHANNEL_ID")
-    private String channelId;
+    @Column(name = "SERVER_ID")
+    private String serverId;
 
-    public CharacterKeys(String userId, String channelId) {
+    public CharacterKeys(String userId, String serverId) {
         this.userId = userId;
-        this.channelId = channelId;
+        this.serverId = serverId;
+    }
+
+    public CharacterKeys() {
+
     }
 
     public String getUserId() {
@@ -25,11 +29,11 @@ public class CharacterKeys implements Serializable {
         this.userId = userId;
     }
 
-    public String getChannelId() {
-        return channelId;
+    public String getServerId() {
+        return serverId;
     }
 
-    public void setChannelId(String channelId) {
-        this.channelId = channelId;
+    public void setServerId(String serverId) {
+        this.serverId = serverId;
     }
 }
