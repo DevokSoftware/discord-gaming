@@ -76,6 +76,13 @@
             <artifactId>JDA</artifactId>
             <version>5.0.0-alpha.10</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.eclipse.microprofile.rest.client/microprofile-rest-client-api -->
+        <dependency>
+            <groupId>org.eclipse.microprofile.rest.client</groupId>
+            <artifactId>microprofile-rest-client-api</artifactId>
+            <version>3.0</version>
+        </dependency>
+
     </dependencies>
     <build>
         <plugins>
