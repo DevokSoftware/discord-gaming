@@ -17,7 +17,7 @@ public class MapillaryCallback {
 
     @GET
     public Response callback(@QueryParam("code") String code) {
-        authenticationService.setMapillaryCode(code);
+        authenticationService.updateMapillaryCode(code);
         return Response.accepted().build();
     }
 }

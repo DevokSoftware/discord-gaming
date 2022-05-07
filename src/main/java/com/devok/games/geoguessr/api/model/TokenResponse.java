@@ -1,15 +1,15 @@
 package com.devok.games.geoguessr.api.model;
 
-import javax.json.bind.annotation.JsonbProperty;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class TokenResponse {
-    @JsonbProperty("access_token")
+    @JsonProperty("access_token")
     private String accessToken;
 
-    @JsonbProperty("expires_in")
-    private String expiresIn;
+    @JsonProperty("expires_in")
+    private Long expiresIn;
 
-    @JsonbProperty("token_type")
+    @JsonProperty("token_type")
     private String tokenType;
 
     public String getAccessToken() {
@@ -20,11 +20,11 @@ public class TokenResponse {
         this.accessToken = accessToken;
     }
 
-    public String getExpiresIn() {
+    public Long getExpiresIn() {
         return expiresIn;
     }
 
-    public void setExpiresIn(String expiresIn) {
+    public void setExpiresIn(Long expiresIn) {
         this.expiresIn = expiresIn;
     }
 

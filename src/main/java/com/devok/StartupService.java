@@ -22,7 +22,7 @@ public class StartupService {
 
     @PostConstruct
     public void start() throws LoginException {
-        JDABuilder jdaBuilder = JDABuilder.createDefault(System.getProperty("jdaTokenKey"));
+        JDABuilder jdaBuilder = JDABuilder.createDefault(System.getProperty("dv8tion.tokenKey"));
         jdaBuilder.enableIntents(GatewayIntent.GUILD_MEMBERS)
                 .setChunkingFilter(ChunkingFilter.ALL)
                 .setMemberCachePolicy(MemberCachePolicy.ALL);
