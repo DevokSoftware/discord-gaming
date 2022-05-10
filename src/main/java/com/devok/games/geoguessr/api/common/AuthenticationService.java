@@ -2,8 +2,8 @@ package com.devok.games.geoguessr.api.common;
 
 import com.devok.games.geoguessr.api.MapillaryService;
 import com.devok.games.geoguessr.api.common.mapper.AuthenticationMapper;
-import com.devok.games.geoguessr.api.model.Authentication;
-import com.devok.games.geoguessr.api.model.TokenRequest;
+import com.devok.games.geoguessr.api.model.mapillary.Authentication;
+import com.devok.games.geoguessr.api.model.mapillary.TokenRequest;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;

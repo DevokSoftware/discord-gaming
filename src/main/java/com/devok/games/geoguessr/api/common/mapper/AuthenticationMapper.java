@@ -1,7 +1,7 @@
 package com.devok.games.geoguessr.api.common.mapper;
 
-import com.devok.games.geoguessr.api.model.Authentication;
-import com.devok.games.geoguessr.api.model.TokenResponse;
+import com.devok.games.geoguessr.api.model.mapillary.Authentication;
+import com.devok.games.geoguessr.api.model.mapillary.TokenResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

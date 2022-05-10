@@ -1,4 +1,4 @@
-package com.devok.games.geoguessr.api.model;
+package com.devok.games.geoguessr.api.model.mapillary;
 
 public class TokenRequest {
     private String grant_type;

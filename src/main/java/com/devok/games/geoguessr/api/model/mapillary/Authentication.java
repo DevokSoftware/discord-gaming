@@ -1,4 +1,4 @@
-package com.devok.games.geoguessr.api.model;
+package com.devok.games.geoguessr.api.model.mapillary;
 
 import java.time.OffsetDateTime;
 
