@@ -1,8 +1,8 @@
 package com.devok.games.geoguessr.api;
 
-import com.devok.games.geoguessr.api.model.mapillary.ImageList;
-import com.devok.games.geoguessr.api.model.mapillary.TokenRequest;
-import com.devok.games.geoguessr.api.model.mapillary.TokenResponse;
+import com.devok.games.geoguessr.api.mapillary.authentication.model.TokenRequest;
+import com.devok.games.geoguessr.api.mapillary.authentication.model.TokenResponse;
+import com.devok.games.geoguessr.api.mapillary.image.model.ImageListDTO;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
 import javax.ws.rs.*;
@@ -21,11 +21,6 @@ public interface MapillaryService {
     @Path("/token")
     TokenResponse getAccessToken(@HeaderParam("Authorization") String headerAuth, TokenRequest tokenRequest);
 
-    @POST
-    @Path("/token")
-    Response getAccessToken2(@HeaderParam("Authorization") String headerAuth, TokenRequest tokenRequest);
-
-    @GET
     @Path("/images")
-    ImageList getImages(@QueryParam("access_token") String accessToken, @QueryParam("fields") String fields, @QueryParam("bbox") String bbox, @QueryParam("limit") String limit);
+    ImageListDTO getImages(@QueryParam("access_token") String accessToken, @QueryParam("fields") String fields, @QueryParam("bbox") String bbox, @QueryParam("limit") String limit);
 }

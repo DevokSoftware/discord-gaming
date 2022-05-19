@@ -1,4 +1,4 @@
-package com.devok.games.geoguessr.api.model.positionstack;
+package com.devok.games.geoguessr.api.positionstack;
 
 import javax.json.bind.annotation.JsonbProperty;
 import java.util.List;

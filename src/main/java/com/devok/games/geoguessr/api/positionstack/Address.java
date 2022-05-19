@@ -1,4 +1,4 @@
-package com.devok.games.geoguessr.api.model.positionstack;
+package com.devok.games.geoguessr.api.positionstack;
 
 public class Address {
     private String label;

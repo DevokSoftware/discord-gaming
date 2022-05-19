@@ -1,4 +1,4 @@
-package com.devok.games.geoguessr.api.model.mapillary;
+package com.devok.games.geoguessr.api.mapillary.authentication.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

@@ -1,9 +1,9 @@
-package com.devok.games.geoguessr.api.model.mapillary;
+package com.devok.games.geoguessr.api.mapillary.image.model;
 
 import javax.json.bind.annotation.JsonbProperty;
 import java.io.Serializable;
 
-public class Image implements Serializable {
+public class ImageDTO implements Serializable {
 
     @JsonbProperty("id")
     private String imageId;

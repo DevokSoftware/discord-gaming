@@ -1,4 +1,4 @@
-package com.devok.games.geoguessr.api.model.mapillary;
+package com.devok.games.geoguessr.api.mapillary.image.model;
 
 import javax.json.bind.annotation.JsonbProperty;
 import java.io.Serializable;

@@ -2,8 +2,7 @@ package com.devok.common.discord.events;
 
 import com.devok.common.models.Character;
 import com.devok.common.services.CharacterService;
-import com.devok.games.geoguessr.api.common.ImageService;
-import com.devok.games.geoguessr.api.model.mapillary.ImageList;
+import com.devok.games.geoguessr.services.images.ImageFacade;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -18,7 +17,7 @@ public class MessageEvent extends ListenerAdapter {
     private CharacterService characterService;
 
     @Inject
-    private ImageService imageService;
+    private ImageFacade imageFacade;
 
     @Override
     public void onMessageReceived(@NotNull MessageReceivedEvent event) {
@@ -28,7 +27,7 @@ public class MessageEvent extends ListenerAdapter {
                 event.getMessage().getChannel().sendMessage("Level: " + characterService.calculateLevel(character.getExp())).queue();
             }
         } else if (event.getMessage().getContentRaw().equals("dv geo")) {
-            ImageList images = imageService.getRandomImage();
+          /*  ImageListDTO images = imageService.getRandomImage();
             if (!images.getImages().isEmpty()) {
                 EmbedBuilder builder = new EmbedBuilder();
                 builder.setThumbnail(images.getImages().get(0).getImageUrl());
@@ -38,6 +37,7 @@ public class MessageEvent extends ListenerAdapter {
                 event.getMessage().getChannel().sendMessage(address).queue();
 
             }
+           */
         } else if (event.getMessage().getContentRaw().equals("dv profile")) {
             EmbedBuilder builder = new EmbedBuilder();
             builder.setTimestamp(Instant.now());

@@ -1,6 +1,6 @@
 package com.devok.games.geoguessr.callback;
 
-import com.devok.games.geoguessr.api.common.AuthenticationService;
+import com.devok.games.geoguessr.api.mapillary.authentication.AuthenticationService;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
