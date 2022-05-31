@@ -1,6 +1,6 @@
 package com.devok;
 
-import com.devok.common.discord.events.MessageEvent;
+import com.devok.games.geoguessr.events.GeoguessrMessageEvent;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.requests.GatewayIntent;
@@ -18,7 +18,7 @@ import javax.security.auth.login.LoginException;
 public class StartupService {
 
     @Inject
-    private MessageEvent messageEvent;
+    private GeoguessrMessageEvent geoguessrMessageEvent;
 
     @PostConstruct
     public void start() throws LoginException {
@@ -27,6 +27,6 @@ public class StartupService {
                 .setChunkingFilter(ChunkingFilter.ALL)
                 .setMemberCachePolicy(MemberCachePolicy.ALL);
         JDA jda = jdaBuilder.build();
-        jda.addEventListener(messageEvent);
+        jda.addEventListener(geoguessrMessageEvent);
     }
 }

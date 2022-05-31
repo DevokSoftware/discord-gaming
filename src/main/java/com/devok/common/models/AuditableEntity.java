@@ -1,13 +1,11 @@
 package com.devok.common.models;
 
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
+import javax.persistence.*;
 import java.time.OffsetDateTime;
 
 @Embeddable
+@MappedSuperclass
 public class AuditableEntity {
 
     @Column(name = "CREATED_AT")

@@ -1,8 +1,10 @@
-package com.devok.common.discord.events;
+package com.devok.games.geoguessr.events;
 
 import com.devok.common.models.Character;
 import com.devok.common.services.CharacterService;
 import com.devok.games.geoguessr.services.images.ImageFacade;
+import com.devok.games.geoguessr.services.images.PointSystem;
+import com.devok.games.geoguessr.services.images.model.Image;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -12,7 +14,7 @@ import javax.inject.Inject;
 import java.awt.*;
 import java.time.Instant;
 
-public class MessageEvent extends ListenerAdapter {
+public class GeoguessrMessageEvent extends ListenerAdapter {
     @Inject
     private CharacterService characterService;
 
@@ -21,24 +23,32 @@ public class MessageEvent extends ListenerAdapter {
 
     @Override
     public void onMessageReceived(@NotNull MessageReceivedEvent event) {
-        if (event.getMessage().getContentRaw().equals("dv rank")) {
+        String receivedMessage = event.getMessage().getContentRaw();
+
+        if (receivedMessage.equals("dv rank")) {
             Character character = characterService.fetchCharacterByUserIdAndServer(event.getAuthor().getId(), event.getGuild().getId());
             if (character != null) {
                 event.getMessage().getChannel().sendMessage("Level: " + characterService.calculateLevel(character.getExp())).queue();
             }
-        } else if (event.getMessage().getContentRaw().equals("dv geo")) {
-          /*  ImageListDTO images = imageService.getRandomImage();
-            if (!images.getImages().isEmpty()) {
+        } else if (receivedMessage.equals("dv geo start") || receivedMessage.equals("dv geo s")) {
+            Image image = imageFacade.startGame(event.getAuthor().getId(), event.getGuild().getId());
+            event.getMessage().getChannel().sendMessage(image.getUrl()).queue();
+        } else if (receivedMessage.startsWith("dv geo guess")) {
+            String address = receivedMessage.replace("dv geo guess ", "");
+            Image image = imageFacade.getActiveGame(event.getAuthor().getId(), event.getGuild().getId());
+            if (image != null) {
+                int distance = imageFacade.calculateDistance(image, address);
                 EmbedBuilder builder = new EmbedBuilder();
-                builder.setThumbnail(images.getImages().get(0).getImageUrl());
-                event.getMessage().getChannel().sendMessage(images.getImages().get(0).getImageUrl()).queue();
-
-                String address = imageService.getAddressCoordinates(images.getImages().get(0).getGeometry().getCoordinates());
-                event.getMessage().getChannel().sendMessage(address).queue();
-
+                builder.setThumbnail(image.getUrl());
+                builder.addField("Address", ":map: " + image.getAddress(), true);
+                builder.addBlankField(false);
+                builder.addField("Distance", ":round_pushpin: " + distance + " Km", true);
+                builder.addField("Points", ":pencil: " + PointSystem.getPoints(distance), true);
+                event.getMessage().getChannel().sendMessageEmbeds(builder.build()).queue();
+                imageFacade.removeImage(image.getId());
             }
-           */
-        } else if (event.getMessage().getContentRaw().equals("dv profile")) {
+        } else if (receivedMessage.equals("dv profile")) {
+            //TODO this code should be in a common listener
             EmbedBuilder builder = new EmbedBuilder();
             builder.setTimestamp(Instant.now());
             builder.addField(":placard: EXP: 40/100", "\uD83D\uDFE9\uD83D\uDFE9\uD83D\uDFE9\uD83D\uDFE9⬛⬛⬛⬛⬛⬛", true);

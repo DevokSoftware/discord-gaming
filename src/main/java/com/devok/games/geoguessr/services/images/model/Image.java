@@ -6,11 +6,11 @@ import javax.persistence.*;
 import java.util.UUID;
 
 @Entity
-@Table(name = "GEO_IMAGE")
-@NamedQueries(
-        @NamedQuery(name = "Image.getLoadedImages", query = "select i from Image i where i.used = false order by i.createdAt desc")
-)
-
+@Table(name = "GEO_IMAGE", schema = "public")
+@NamedQueries({
+        @NamedQuery(name = "Image.getLoadedImages", query = "select i from Image i where i.used = false order by i.createdAt desc"),
+        @NamedQuery(name = "Image.getActiveGame", query = "select i from Image i where i.used = true and i.user = :userId and i.server = :serverId")
+})
 public class Image extends AuditableEntity {
     @Id
     @Column(name = "IMAGE_ID")
@@ -25,17 +25,17 @@ public class Image extends AuditableEntity {
     @Column(name = "LONGITUDE")
     private double longitude;
 
-    @Column(name = "URL")
+    @Column(name = "URL", length = 1000)
     private String url;
 
     @Column(name = "USED")
     private boolean used;
 
-    @Column(name = "USER")
-    private boolean user;
+    @Column(name = "USER_ID")
+    private String user;
 
-    @Column(name = "CHANNEL")
-    private boolean channel;
+    @Column(name = "SERVER_ID")
+    private String server;
 
     public Image() {
     }
@@ -94,20 +94,20 @@ public class Image extends AuditableEntity {
         this.url = url;
     }
 
-    public boolean isUser() {
+    public String getUser() {
         return user;
     }
 
-    public void setUser(boolean user) {
+    public void setUser(String user) {
         this.user = user;
     }
 
-    public boolean isChannel() {
-        return channel;
+    public String getServer() {
+        return server;
     }
 
-    public void setChannel(boolean channel) {
-        this.channel = channel;
+    public void setServer(String server) {
+        this.server = server;
     }
 }
 

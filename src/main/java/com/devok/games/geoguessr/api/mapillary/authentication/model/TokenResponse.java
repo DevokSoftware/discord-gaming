@@ -1,15 +1,15 @@
 package com.devok.games.geoguessr.api.mapillary.authentication.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import javax.json.bind.annotation.JsonbProperty;
 
 public class TokenResponse {
-    @JsonProperty("access_token")
+    @JsonbProperty("access_token")
     private String accessToken;
 
-    @JsonProperty("expires_in")
+    @JsonbProperty("expires_in")
     private Long expiresIn;
 
-    @JsonProperty("token_type")
+    @JsonbProperty("token_type")
     private String tokenType;
 
     public String getAccessToken() {

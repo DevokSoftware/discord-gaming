@@ -8,13 +8,13 @@ import java.util.List;
 public class ImageListDTO implements Serializable {
 
     @JsonbProperty("data")
-    private List<ImageDTO> imageDTOS;
+    private List<ImageDTO> data;
 
-    public List<ImageDTO> getImages() {
-        return imageDTOS;
+    public List<ImageDTO> getData() {
+        return data;
     }
 
-    public void setImages(List<ImageDTO> imageDTOS) {
-        this.imageDTOS = imageDTOS;
+    public void setData(List<ImageDTO> data) {
+        this.data = data;
     }
 }

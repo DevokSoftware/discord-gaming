@@ -1,4 +1,4 @@
-package com.devok.games.geoguessr.api;
+package com.devok.games.geoguessr.api.mapillary;
 
 import com.devok.games.geoguessr.api.mapillary.authentication.model.TokenRequest;
 import com.devok.games.geoguessr.api.mapillary.authentication.model.TokenResponse;
@@ -21,6 +21,7 @@ public interface MapillaryService {
     @Path("/token")
     TokenResponse getAccessToken(@HeaderParam("Authorization") String headerAuth, TokenRequest tokenRequest);
 
+    @GET
     @Path("/images")
-    ImageListDTO getImages(@QueryParam("access_token") String accessToken, @QueryParam("fields") String fields, @QueryParam("bbox") String bbox, @QueryParam("limit") String limit);
+    ImageListDTO  getImages(@QueryParam("access_token") String accessToken, @QueryParam("fields") String fields, @QueryParam("bbox") String bbox, @QueryParam("limit") String limit);
 }

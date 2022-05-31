@@ -1,7 +1,9 @@
 package com.devok.games.geoguessr.services.images;
 
 import com.devok.common.database.EMRepository;
-import com.devok.games.geoguessr.api.MapillaryService;
+import com.devok.games.geoguessr.api.geonames.GeoNames;
+import com.devok.games.geoguessr.api.geonames.model.GeoData;
+import com.devok.games.geoguessr.api.mapillary.MapillaryService;
 import com.devok.games.geoguessr.api.mapillary.authentication.AuthenticationService;
 import com.devok.games.geoguessr.api.mapillary.image.model.ImageDTO;
 import com.devok.games.geoguessr.api.mapillary.image.model.ImageListDTO;
@@ -12,14 +14,14 @@ import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.ejb.*;
 import javax.inject.Inject;
-import java.util.Random;
-
+import javax.transaction.Transactional;
 
 @Startup
 @Singleton
 public class LoadImagesJob extends EMRepository<Image> {
 
     private final static String JOB_NAME = "Load_Images_Job";
+
     @Inject
     private MapillaryService mapillaryService;
 
@@ -29,8 +31,14 @@ public class LoadImagesJob extends EMRepository<Image> {
     @Inject
     private ImageMapper imageMapper;
 
+    @Inject
+    private ImageFacade imageFacade;
+
     @Resource
     private TimerService timerService;
+
+    @Inject
+    private GeoNames geoNames;
 
     @PostConstruct
     private void init() {
@@ -49,30 +57,44 @@ public class LoadImagesJob extends EMRepository<Image> {
         return 20 - createNamedQuery("Image.getLoadedImages", Image.class).getResultList().size();
     }
 
+    @Transactional(dontRollbackOn = Exception.class)
     public void loadImagesFromMapillary(int numberOfImagesToLoad) {
+        boolean trustedLocation;
+        int attempts;
         for (int i = 0; i < numberOfImagesToLoad; i++) {
-            ImageListDTO imageListDTO;
+            trustedLocation = false;
+            attempts = 0;
+            ImageListDTO imageListDTO = new ImageListDTO();
             do {
-                imageListDTO = mapillaryService.getImages(authenticationService.getAccessToken(),
-                        "id,geometry,thumb_original_url",
-                        getRandomCoordinates(),
-                        "20");
+                try {
+                    imageListDTO = mapillaryService.getImages(authenticationService.getAccessToken(),
+                            "id,geometry,thumb_original_url",
+                            getRandomCoordinates(),
+                            "20");
+                    System.out.println("Number of photos: " + imageListDTO.getData().size());
+                    trustedLocation = imageListDTO.getData().size() >= 20;
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                    attempts++;
+                    if (attempts == 5) {
+                        return;
+                    }
+                }
             }
-            while (imageListDTO.getImages().size() < 20);
+            while (!trustedLocation);
 
-            ImageDTO imageDTO = imageListDTO.getImages().get(0);
-            persist(imageMapper.mapToImage(imageDTO));
+            ImageDTO imageDTO = imageListDTO.getData().get(0);
+            String address = imageFacade.getAddressFromCoordinates(imageDTO.getGeometry().getCoordinates());
+            persist(imageMapper.mapToImage(imageDTO, address));
         }
     }
 
     private String getRandomCoordinates() {
-        Random random = new Random();
-        int incrementalX = random.nextInt(90) - 45;
-        int incrementalY = random.nextInt(90) - 45;
-        float minX = random.nextFloat() + incrementalX;
-        float maxX = random.nextFloat() + minX + 0.1f;
-        float minY = random.nextFloat() + incrementalY;
-        float maxY = random.nextFloat() + minY + 0.1f;
+        GeoData randomLocation = geoNames.getAddressFromCoordinates();
+        float minX = randomLocation.getNearest().getLatitude();
+        float maxX = minX + 2f;
+        float minY = randomLocation.getNearest().getLongitude();
+        float maxY = minY + 2f;
 
         String coordinates = minX + "," + minY + "," + maxX + "," + maxY;
         System.out.println("Coordinates: " + coordinates);

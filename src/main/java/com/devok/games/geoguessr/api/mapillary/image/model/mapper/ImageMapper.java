@@ -9,10 +9,11 @@ import org.mapstruct.Mapping;
 public interface ImageMapper {
 
     @Mapping(source = "imageDTO.imageUrl", target = "url")
-    @Mapping(expression = "java(setLatitude(imageDTO.geometry.coordinates))", target = "latitude")
-    @Mapping(expression = "java(setLongitude(imageDTO.geometry.coordinates))", target = "longitude")
+    @Mapping(expression = "java(setLatitude(imageDTO.getGeometry().getCoordinates()))", target = "latitude")
+    @Mapping(expression = "java(setLongitude(imageDTO.getGeometry().getCoordinates()))", target = "longitude")
     @Mapping(constant = "false", target = "used")
-    Image mapToImage(ImageDTO imageDTO);
+    @Mapping(source = "address", target = "address")
+    Image mapToImage(ImageDTO imageDTO, String address);
 
     default Double setLatitude(double[] coordinates) {
         if(coordinates != null){

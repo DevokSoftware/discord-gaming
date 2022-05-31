@@ -1,15 +1,19 @@
 package com.devok.games.geoguessr.api.mapillary.authentication;
 
-import com.devok.games.geoguessr.api.MapillaryService;
+import com.devok.common.database.EMRepository;
+import com.devok.games.geoguessr.api.mapillary.MapillaryService;
 import com.devok.games.geoguessr.api.mapillary.authentication.mapper.AuthenticationMapper;
 import com.devok.games.geoguessr.api.mapillary.authentication.model.AuthenticationDTO;
 import com.devok.games.geoguessr.api.mapillary.authentication.model.TokenRequest;
+import com.devok.games.geoguessr.services.images.model.Code;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.persistence.NoResultException;
+import javax.transaction.Transactional;
 
 @ApplicationScoped
-public class AuthenticationService {
+public class AuthenticationService extends EMRepository<Code> {
 
     @Inject
     private MapillaryService mapillaryService;
@@ -25,14 +29,36 @@ public class AuthenticationService {
         this.authenticationDTO = new AuthenticationDTO();
     }
 
-    public void updateMapillaryCode(String mapillaryCode) {
-        authenticationDTO.setMapillaryCode(mapillaryCode);
+    @Transactional
+    public void updateMapillaryCode(String code) {
+        Code mapillaryCode = getCode();
+        if (mapillaryCode != null) {
+            remove(mapillaryCode);
+        }
+        Code newCode = new Code(code);
+        persist(newCode);
+    }
+
+    public void loadMapillaryCode() {
+        Code code = getCode();
+        if (code != null) {
+            authenticationDTO.setMapillaryCode(code.getMapillaryCode());
+        }
+    }
+
+    public Code getCode() {
+        try {
+            return createNamedQuery("Token.getTokens", Code.class).getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     public String getAccessToken() {
-        if (authenticationDTO.getAccessToken() == null ) {
+        loadMapillaryCode();
+        if (authenticationDTO.getAccessToken() == null) {
             createAccessToken();
-        }else if(authenticationDTO.accessTokenAlreadyExpired()){
+        } else if (authenticationDTO.accessTokenAlreadyExpired()) {
             refreshAccessToken();
         }
         return authenticationDTO.getAccessToken();

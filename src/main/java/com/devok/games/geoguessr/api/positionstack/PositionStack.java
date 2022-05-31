@@ -1,7 +1,6 @@
-package com.devok.games.geoguessr.api;
+package com.devok.games.geoguessr.api.positionstack;
 
 
-import com.devok.games.geoguessr.api.positionstack.AddressList;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
 import javax.ws.rs.*;
@@ -16,4 +15,9 @@ public interface PositionStack {
     @GET
     @Path("/reverse")
     AddressList getAddressFromCoordinates(@QueryParam("access_key") String accessKey, @QueryParam("query") String query);
+
+    @GET
+    @Path("/forward")
+    AddressList getCoordinatesFromAddress(@QueryParam("access_key") String accessKey, @QueryParam("query") String query);
+
 }
