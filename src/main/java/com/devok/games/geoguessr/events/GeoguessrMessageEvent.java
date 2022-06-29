@@ -30,11 +30,11 @@ public class GeoguessrMessageEvent extends ListenerAdapter {
             if (character != null) {
                 event.getMessage().getChannel().sendMessage("Level: " + characterService.calculateLevel(character.getExp())).queue();
             }
-        } else if (receivedMessage.equals("dv geo start") || receivedMessage.equals("dv geo s")) {
+        } else if (receivedMessage.equals("!dv geo start") || receivedMessage.equals("!dv geo s")) {
             Image image = imageFacade.startGame(event.getAuthor().getId(), event.getGuild().getId());
             event.getMessage().getChannel().sendMessage(image.getUrl()).queue();
-        } else if (receivedMessage.startsWith("dv geo guess")) {
-            String address = receivedMessage.replace("dv geo guess ", "");
+        } else if (receivedMessage.startsWith("!dv geo guess")) {
+            String address = receivedMessage.replace("!dv geo guess ", "");
             Image image = imageFacade.getActiveGame(event.getAuthor().getId(), event.getGuild().getId());
             if (image != null) {
                 int distance = imageFacade.calculateDistance(image, address);
@@ -45,7 +45,10 @@ public class GeoguessrMessageEvent extends ListenerAdapter {
                 builder.addField("Distance", ":round_pushpin: " + distance + " Km", true);
                 builder.addField("Points", ":pencil: " + PointSystem.getPoints(distance), true);
                 event.getMessage().getChannel().sendMessageEmbeds(builder.build()).queue();
+
                 imageFacade.removeImage(image.getId());
+
+
             }
         } else if (receivedMessage.equals("dv profile")) {
             //TODO this code should be in a common listener
